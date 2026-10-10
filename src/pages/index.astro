@@ -7,8 +7,6 @@ import { history, eras } from '../data/history';
 
 const path = import.meta.env.BASE_URL;
 const featured = books.slice(0, 8);
-const finished = books.filter((b) => b.status === 'finished').length;
-const reading = books.filter((b) => b.status === 'reading').length;
 ---
 
 <Base title="The Left Library" page="Home" description="A curated museum-style library of left-wing history, theory and books.">
@@ -24,7 +22,6 @@ const reading = books.filter((b) => b.status === 'reading').length;
         <div><b>{books.length}</b>Books</div>
         <div><b>{history.length}</b>History entries</div>
         <div><b>{categories.length}</b>Categories</div>
-        <div><b>{finished + reading}</b>In progress</div>
       </div>
     </div>
   </section>
@@ -46,7 +43,6 @@ const reading = books.filter((b) => b.status === 'reading').length;
                 <div class="author">{b.author}</div>
                 <div class="meta-row">
                   <span>{b.year}</span>
-                  <span class={`badge ${b.status}`}>{b.status}</span>
                 </div>
               </div>
             </a>

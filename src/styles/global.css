@@ -287,28 +287,6 @@ img {
   color: var(--ink-soft);
 }
 
-.badge {
-  font-family: var(--sans);
-  font-size: 0.62rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 3px 8px;
-  border-radius: 20px;
-  border: 1px solid var(--line-strong);
-  color: var(--ink);
-}
-
-.badge.reading {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.badge.finished {
-  background: var(--ink);
-  color: var(--bg);
-  border-color: var(--ink);
-}
-
 .book .summary {
   margin-top: 10px;
   font-size: 0.86rem;
