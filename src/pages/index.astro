@@ -1,0 +1,118 @@
+---
+import Base from '../layouts/Base.astro';
+import BookCover from '../components/BookCover.astro';
+import { books, categories } from '../data/books';
+import { history, eras } from '../data/history';
+
+const path = import.meta.env.BASE_URL;
+const featured = books.slice(0, 8);
+const finished = books.filter((b) => b.status === 'finished').length;
+const reading = books.filter((b) => b.status === 'reading').length;
+---
+
+<Base title="The Left Library" page="Home" description="A curated museum-style library of left-wing history, theory and books.">
+  <section class="hero">
+    <div class="container">
+      <div class="eyebrow">A Curated Library</div>
+      <h1>History &amp; <span class="amp">Theory</span> of the Left</h1>
+      <p class="lede">
+        A personal museum of the socialist and communist tradition — its books, its battles,
+        and the ideas that refuse to be buried. Collected, annotated, and kept for study.
+      </p>
+      <div class="meta">
+        <div><b>{books.length}</b>Books</div>
+        <div><b>{history.length}</b>History entries</div>
+        <div><b>{categories.length}</b>Categories</div>
+        <div><b>{finished + reading}</b>In progress</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="num">I</span>
+        <h2>The Shelf</h2>
+        <div class="rule"></div>
+      </div>
+      <div class="book-grid">
+        {
+          featured.map((b) => (
+            <a class="book" href={`${path}books/`}>
+              <BookCover book={b} />
+              <div class="book-info">
+                <div class="title">{b.title}</div>
+                <div class="author">{b.author}</div>
+                <div class="meta-row">
+                  <span>{b.year}</span>
+                  <span class={`badge ${b.status}`}>{b.status}</span>
+                </div>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+      <p style="margin-top:36px;font-family:var(--sans);font-size:0.8rem;letter-spacing:.1em;text-transform:uppercase;">
+        <a href={`${path}books/`} style="color:var(--accent);">Browse the full shelf →</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="num">II</span>
+        <h2>The History</h2>
+        <div class="rule"></div>
+      </div>
+      <div class="eras">
+        {
+          eras.map((e) => (
+            <div class="era-card">
+              <div class="e-label">{e.key}</div>
+              <div class="e-name">{e.label}</div>
+              <div class="e-range">{e.from} – {e.to}</div>
+            </div>
+          ))
+        }
+      </div>
+      <div class="timeline">
+        {
+          history.slice(0, 5).map((h) => (
+            <div class="event">
+              <div class="year">{h.year}</div>
+              <h3>{h.title}</h3>
+              <div class="loc">{h.location}</div>
+              <p>{h.body}</p>
+            </div>
+          ))
+        }
+      </div>
+      <p style="margin-top:36px;font-family:var(--sans);font-size:0.8rem;letter-spacing:.1em;text-transform:uppercase;">
+        <a href={`${path}history/`} style="color:var(--accent);">Walk the full timeline →</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="num">III</span>
+        <h2>About This Library</h2>
+        <div class="rule"></div>
+      </div>
+      <div class="prose">
+        <p>
+          This is a working library, not a monument. It is a place to <strong>read, annotate
+          and think</strong> about the history and theory of the left — from the first
+          utopias to the crises of the present.
+        </p>
+        <p>
+          The books are grouped by theme; the history is a walking timeline. Every entry is
+          meant to be opened, argued with, and re-read. The tradition is alive so long as it
+          is studied.
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>

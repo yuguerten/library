@@ -1,0 +1,81 @@
+---
+import Base from '../../layouts/Base.astro';
+import BookCover from '../../components/BookCover.astro';
+import { books, categories } from '../../data/books';
+---
+
+<Base title="Books" page="Books" description="The full book shelf of The Left Library.">
+  <section class="hero" style="padding:64px 0;">
+    <div class="container">
+      <div class="eyebrow">Collection</div>
+      <h1 style="font-size:clamp(2.2rem,5vw,3.4rem);">The Bookshelf</h1>
+      <p class="lede" style="font-size:1.05rem;">
+        {books.length} works of theory, history and critique. Use the filters to browse
+        by theme or reading status.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:40px;">
+    <div class="container">
+      <div class="filters" id="filters">
+        <button class="filter-btn active" data-cat="All">All</button>
+        {
+          categories.map((c) => (
+            <button class="filter-btn" data-cat={c}>{c}</button>
+          ))
+        }
+        <span style="flex:1"></span>
+        <button class="filter-btn" data-status="reading">Reading</button>
+        <button class="filter-btn" data-status="finished">Finished</button>
+        <button class="filter-btn" data-status="all">Clear status</button>
+      </div>
+
+      <div class="book-grid" id="grid">
+        {
+          books.map((b, i) => (
+            <article class="book" data-cat={b.category} data-status={b.status} style={`--i:${i}`}>
+              <BookCover book={b} />
+              <div class="book-info">
+                <div class="title">{b.title}</div>
+                <div class="author">{b.author}</div>
+                <div class="meta-row">
+                  <span>{b.year}</span>
+                  <span class={`badge ${b.status}`}>{b.status}</span>
+                </div>
+                <p class="summary">{b.summary}</p>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const grid = document.getElementById('grid');
+  const buttons = Array.from(document.querySelectorAll('.filter-btn'));
+  let cat = 'All';
+  let status = 'all';
+
+  function apply() {
+    buttons.forEach((b) => {
+      b.classList.toggle('active', (b.dataset.cat === cat && !b.dataset.status) ||
+        (b.dataset.status === status && !b.dataset.cat));
+    });
+    grid.querySelectorAll('.book').forEach((book) => {
+      const okCat = cat === 'All' || book.dataset.cat === cat;
+      const okStatus = status === 'all' || book.dataset.status === status;
+      book.style.display = okCat && okStatus ? '' : 'none';
+    });
+  }
+
+  buttons.forEach((b) => {
+    b.addEventListener('click', () => {
+      if (b.dataset.cat) { cat = b.dataset.cat; status = 'all'; }
+      else { status = b.dataset.status; cat = 'All'; }
+      apply();
+    });
+  });
+</script>

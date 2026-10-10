@@ -1,0 +1,46 @@
+---
+import Base from '../../layouts/Base.astro';
+import { history, eras } from '../../data/history';
+---
+
+<Base title="History" page="History" description="A walking timeline of left-wing history.">
+  <section class="hero" style="padding:64px 0;">
+    <div class="container">
+      <div class="eyebrow">Timeline</div>
+      <h1 style="font-size:clamp(2.2rem,5vw,3.4rem);">The History of the Left</h1>
+      <p class="lede" style="font-size:1.05rem;">
+        {history.length} moments from the first utopias to the crises of today — a walking
+        tour through five centuries of struggle.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:40px;">
+    <div class="container">
+      <div class="eras">
+        {
+          eras.map((e) => (
+            <div class="era-card">
+              <div class="e-label">{e.key}</div>
+              <div class="e-name">{e.label}</div>
+              <div class="e-range">{e.from} – {e.to}</div>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="timeline" id="timeline">
+        {
+          history.map((h) => (
+            <div class="event" data-era={h.era}>
+              <div class="year">{h.year}</div>
+              <h3>{h.title}</h3>
+              <div class="loc">{h.location}</div>
+              <p>{h.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Base>

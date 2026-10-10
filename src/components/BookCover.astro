@@ -1,0 +1,30 @@
+---
+import type { Book } from '../data/books';
+
+interface Props {
+  book: Book;
+}
+
+const { book } = Astro.props;
+
+// Generate a harmonious two-tone gradient from the book's hue.
+const c1 = `hsl(${book.hue}, 34%, 22%)`;
+const c2 = `hsl(${(book.hue + 45) % 360}, 40%, 12%)`;
+---
+
+<div class="book-cover">
+  {
+    book.image
+      ? <img src={book.image} alt={`${book.title} cover`} loading="lazy" />
+      : (
+        <div
+          class="cover-text"
+          style={`background: linear-gradient(160deg, ${c1}, ${c2});`}
+        >
+          <span class="t">{book.title}</span>
+          <span class="a">{book.author}</span>
+        </div>
+      )
+  }
+  <div class="cover-band" style={`background: hsl(${book.hue}, 60%, 55%);`}></div>
+</div>

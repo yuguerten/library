@@ -1,0 +1,58 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  page?: string;
+}
+
+const { title, description, page } = Astro.props;
+const siteTitle = 'The Left Library';
+const path = import.meta.env.BASE_URL;
+const nav = [
+  { href: path, label: 'Home' },
+  { href: `${path}books/`, label: 'Books' },
+  { href: `${path}history/`, label: 'History' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description ?? 'A curated museum-style library of left-wing history, theory and books.'} />
+    <title>{title === siteTitle ? siteTitle : `${title} · ${siteTitle}`}</title>
+    <link rel="icon" href={`${path}favicon.svg`} type="image/svg+xml" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href={path}><span class="accent">The Left</span> Library</a>
+        <nav class="nav" aria-label="Primary">
+          {
+            nav.map((n) => (
+              <a href={n.href} aria-current={page === n.label ? 'page' : undefined}>
+                {n.label}
+              </a>
+            ))
+          }
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <span class="brand-f">The Left Library</span>
+        <span>A curated collection of history &amp; theory.</span>
+        <span>Built with Astro</span>
+      </div>
+    </footer>
+  </body>
+</html>
