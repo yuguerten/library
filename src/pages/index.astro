@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import BookCover from '../components/BookCover.astro';
+import HistoryExhibit from '../components/HistoryExhibit.astro';
 import { books, categories } from '../data/books';
 import { history, eras } from '../data/history';
 
@@ -76,37 +77,10 @@ const reading = books.filter((b) => b.status === 'reading').length;
           ))
         }
       </div>
-      <div class="timeline">
-        {
-          history.slice(0, 5).map((h, i) => (
-            <article class="event reveal" data-era={h.era} style={`--i:${i}`}>
-              {
-                h.image && (
-                  <div class="event-media">
-                    <img src={h.image} alt={`${h.title} (${h.year})`} loading="lazy" />
-                  </div>
-                )
-              }
-              <div class="event-body">
-                <div class="year">{h.year}</div>
-                <h3>{h.title}</h3>
-                <div class="loc">{h.location}</div>
-                <p>{h.body}</p>
-                {
-                  h.learnMore && (
-                    <a class="learn-more" href={h.learnMore.url} target="_blank" rel="noopener noreferrer">
-                      Learn more about {h.learnMore.label} <span class="arrow">→</span>
-                    </a>
-                  )
-                }
-              </div>
-            </article>
-          ))
-        }
-      </div>
-      <p style="margin-top:36px;font-family:var(--sans);font-size:0.8rem;letter-spacing:.1em;text-transform:uppercase;">
-        <a href={`${path}history/`} style="color:var(--accent);">Walk the full timeline →</a>
-      </p>
+      <HistoryExhibit
+        events={history.slice(0, 5)}
+        footerLink={{ label: 'Walk the full timeline', url: `${path}history/` }}
+      />
     </div>
   </section>
 
@@ -132,23 +106,3 @@ const reading = books.filter((b) => b.status === 'reading').length;
     </div>
   </section>
 </Base>
-
-<script>
-  const els = document.querySelectorAll('.reveal');
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          if (e.isIntersecting) {
-            e.target.classList.add('is-visible');
-            io.unobserve(e.target);
-          }
-        }
-      },
-      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
-    );
-    els.forEach((el) => io.observe(el));
-  } else {
-    els.forEach((el) => el.classList.add('is-visible'));
-  }
-</script>

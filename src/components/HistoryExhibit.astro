@@ -1,0 +1,106 @@
+---
+import type { HistoryEvent } from '../data/history';
+
+interface Props {
+  /** Events to display. */
+  events: HistoryEvent[];
+  /** Link shown after the last entry (optional). */
+  footerLink?: { label: string; url: string };
+}
+
+const { events, footerLink } = Astro.props;
+---
+
+<div class="exhibit">
+  <div class="exhibit-spine" aria-hidden="true"></div>
+
+  <ol class="exhibit-list">
+    {
+      events.map((h, i) => {
+        const side = i % 2 === 0 ? 'left' : 'right';
+        return (
+          <li class="exhibit-item" data-era={h.era} style={`--i:${i}`}>
+            <div class={`exhibit-card ${side}`}>
+              <figure class="exhibit-media">
+                {
+                  h.image
+                    ? <img src={h.image} alt={`${h.title} (${h.year})`} loading="lazy" />
+                    : <div class="exhibit-media-fallback" aria-hidden="true"></div>
+                }
+                <figcaption class="exhibit-caption">
+                  {h.location} · {h.year}
+                </figcaption>
+              </figure>
+
+              <div class="exhibit-body">
+                <div class="exhibit-year" aria-hidden="true">{h.year}</div>
+                <h3 class="exhibit-title">{h.title}</h3>
+                <p class="exhibit-desc">{h.body}</p>
+                {
+                  h.learnMore && (
+                    <a
+                      class="exhibit-link"
+                      href={h.learnMore.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Learn more about {h.learnMore.label}
+                      <span class="arrow">→</span>
+                    </a>
+                  )
+                }
+              </div>
+            </div>
+
+            <div class="exhibit-node" aria-hidden="true"><span>{i + 1}</span></div>
+          </li>
+        );
+      })
+    }
+  </ol>
+
+  {
+    footerLink && (
+      <p class="exhibit-footer">
+        <a href={footerLink.url}>{footerLink.label} →</a>
+      </p>
+    )
+  }
+</div>
+
+<script>
+  const items = document.querySelectorAll('.exhibit-item');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add('is-in');
+            io.unobserve(e.target);
+          }
+        }
+      },
+      { threshold: 0.18, rootMargin: '0px 0px -60px 0px' }
+    );
+    items.forEach((el) => io.observe(el));
+  } else {
+    items.forEach((el) => el.classList.add('is-in'));
+  }
+
+  // Subtle parallax on the image inside each in-view item.
+  const medias = document.querySelectorAll('.exhibit-media');
+  if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const mIo = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add('parallax-active');
+            mIo.unobserve(e.target);
+          }
+        }
+      },
+      { threshold: 0.2 }
+    );
+    medias.forEach((el) => mIo.observe(el));
+  }
+</script>
