@@ -8,8 +8,10 @@
   --line: rgba(26, 23, 20, 0.14);
   --line-strong: rgba(26, 23, 20, 0.4);
   --card: #fffdf7;
-  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
-  --sans: "Avenir Next", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --display: "Cormorant Garamond", "Palatino Linotype", Georgia, serif;
+  --sans: "DM Sans", "Segoe UI", system-ui, sans-serif;
+  --hand: "Nothing You Could Do", "Segoe Print", "Bradley Hand", cursive;
 }
 
 * {
@@ -43,6 +45,28 @@ img {
 ::selection {
   background: var(--accent);
   color: #fff;
+}
+
+/* Exhibition titles, reading text, and archival labels each have their own voice. */
+h1,
+h2,
+h3,
+.brand,
+.brand-f,
+.book-info .title,
+.era-card .e-name {
+  font-family: var(--display);
+}
+
+.hero h1 {
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+}
+
+.lede,
+.exhibit-desc,
+.prose {
+  font-family: var(--serif);
 }
 
 .container {
@@ -590,11 +614,8 @@ img {
 
 .exhibit-item {
   position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 72px;
-  align-items: center;
-  padding: 40px 0;
+  padding: 64px 0;
+  border-bottom: 1px solid var(--line);
   opacity: 0;
   transform: translateY(34px);
   transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
@@ -607,9 +628,20 @@ img {
 }
 
 .exhibit-card {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(28px, 5vw, 72px);
+}
+
+.exhibit-item:nth-child(even) .exhibit-media {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.exhibit-item:nth-child(even) .exhibit-body {
+  grid-column: 1;
+  grid-row: 1;
 }
 
 /* Alternate sides around the spine */
@@ -625,16 +657,13 @@ img {
 .exhibit-media {
   position: relative;
   overflow: hidden;
-  border-radius: 2px;
-  border: 1px solid var(--line-strong);
-  background: var(--card);
-  box-shadow: 0 1px 0 rgba(26, 23, 20, 0.06);
+  background: var(--bg);
 }
 
 .exhibit-media img {
   width: 100%;
-  height: 340px;
-  object-fit: cover;
+  height: 440px;
+  object-fit: contain;
   object-position: center top;
   filter: grayscale(42%) contrast(1.04);
   transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1),
@@ -661,18 +690,12 @@ img {
 }
 
 .exhibit-caption {
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
   font-family: var(--sans);
   font-size: 0.66rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #f4f1ea;
-  background: rgba(20, 17, 14, 0.72);
-  padding: 5px 9px;
-  border-radius: 2px;
-  backdrop-filter: blur(2px);
+  color: var(--ink-soft);
+  padding: 14px 0;
 }
 
 /* Body — oversized year + serif title */
@@ -681,18 +704,19 @@ img {
 }
 
 .exhibit-year {
-  font-family: var(--serif);
-  font-size: clamp(3rem, 6vw, 4.6rem);
-  line-height: 0.95;
-  font-weight: 600;
+  font-family: var(--hand);
+  font-size: clamp(3.2rem, 6vw, 5.5rem);
+  overflow-wrap: anywhere;
+  line-height: 1.2;
+  font-weight: 400;
   letter-spacing: -0.02em;
   color: var(--accent);
   margin-bottom: 6px;
 }
 
 .exhibit-title {
-  font-family: var(--serif);
-  font-size: clamp(1.3rem, 2.2vw, 1.6rem);
+  font-family: var(--display);
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
   font-weight: 600;
   letter-spacing: 0.01em;
   line-height: 1.15;
@@ -704,6 +728,15 @@ img {
   line-height: 1.65;
   color: var(--ink-soft);
   max-width: 48ch;
+}
+
+.exhibit-location {
+  margin: 14px 0 20px;
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ink-soft);
 }
 
 .exhibit-link {
@@ -786,9 +819,18 @@ img {
   }
 
   .exhibit-item {
-    grid-template-columns: 1fr;
-    padding-left: 44px;
-    gap: 16px;
+    padding: 36px 0;
+  }
+
+  .exhibit-card {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  .exhibit-item:nth-child(even) .exhibit-media,
+  .exhibit-item:nth-child(even) .exhibit-body {
+    grid-column: auto;
+    grid-row: auto;
   }
 
   .exhibit-card.left,
@@ -822,6 +864,7 @@ img {
     transition: none;
   }
 }
+@media (max-width: 720px) {
   .header-inner {
     flex-direction: column;
     gap: 12px;

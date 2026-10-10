@@ -26,6 +26,14 @@ const nav = [
     <meta name="description" content={description ?? 'A curated museum-style library of left-wing history, theory and books.'} />
     <title>{title === siteTitle ? siteTitle : `${title} · ${siteTitle}`}</title>
     <link rel="icon" href={`${path}favicon.svg`} type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;600&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet" />
+    <script>
+      if ('serviceWorker' in navigator && !import.meta.env.DEV) {
+        navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`).catch(() => {});
+      }
+    </script>
   </head>
   <body>
     <header class="site-header">

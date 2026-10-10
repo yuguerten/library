@@ -12,15 +12,12 @@ const { events, footerLink } = Astro.props;
 ---
 
 <div class="exhibit">
-  <div class="exhibit-spine" aria-hidden="true"></div>
-
   <ol class="exhibit-list">
     {
       events.map((h, i) => {
-        const side = i % 2 === 0 ? 'left' : 'right';
         return (
           <li class="exhibit-item" data-era={h.era} style={`--i:${i}`}>
-            <div class={`exhibit-card ${side}`}>
+            <div class="exhibit-card">
               <figure class="exhibit-media">
                 {
                   h.image
@@ -33,8 +30,9 @@ const { events, footerLink } = Astro.props;
               </figure>
 
               <div class="exhibit-body">
-                <div class="exhibit-year" aria-hidden="true">{h.year}</div>
+                <div class="exhibit-year">{h.year}</div>
                 <h3 class="exhibit-title">{h.title}</h3>
+                <div class="exhibit-location">{h.location} · Historical exhibition</div>
                 <p class="exhibit-desc">{h.body}</p>
                 {
                   h.learnMore && (
@@ -51,8 +49,6 @@ const { events, footerLink } = Astro.props;
                 }
               </div>
             </div>
-
-            <div class="exhibit-node" aria-hidden="true"><span>{i + 1}</span></div>
           </li>
         );
       })
