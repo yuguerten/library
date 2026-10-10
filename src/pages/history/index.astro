@@ -31,16 +31,62 @@ import { history, eras } from '../../data/history';
 
       <div class="timeline" id="timeline">
         {
-          history.map((h) => (
-            <div class="event" data-era={h.era}>
-              <div class="year">{h.year}</div>
-              <h3>{h.title}</h3>
-              <div class="loc">{h.location}</div>
-              <p>{h.body}</p>
-            </div>
+          history.map((h, i) => (
+            <article
+              class="event reveal"
+              data-era={h.era}
+              style={`--i:${i}`}
+            >
+              {
+                h.image && (
+                  <div class="event-media">
+                    <img src={h.image} alt={`${h.title} (${h.year})`} loading="lazy" />
+                  </div>
+                )
+              }
+              <div class="event-body">
+                <div class="year">{h.year}</div>
+                <h3>{h.title}</h3>
+                <div class="loc">{h.location}</div>
+                <p>{h.body}</p>
+                {
+                  h.learnMore && (
+                    <a
+                      class="learn-more"
+                      href={h.learnMore.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Learn more about {h.learnMore.label} <span class="arrow">→</span>
+                    </a>
+                  )
+                }
+              </div>
+            </article>
           ))
         }
       </div>
     </div>
   </section>
 </Base>
+
+<script>
+  // Scroll-reveal: fade/slide events in as they enter the viewport.
+  const els = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add('is-visible');
+            io.unobserve(e.target);
+          }
+        }
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    );
+    els.forEach((el) => io.observe(el));
+  } else {
+    els.forEach((el) => el.classList.add('is-visible'));
+  }
+</script>
