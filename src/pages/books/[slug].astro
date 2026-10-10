@@ -1,0 +1,56 @@
+---
+import Base from '../../layouts/Base.astro';
+import BookCover from '../../components/BookCover.astro';
+import { books, bookSlug } from '../../data/books';
+import { bookNotes } from '../../data/book-notes';
+
+export function getStaticPaths() {
+  return books.map(book => ({ params: { slug: bookSlug(book) }, props: { book } }));
+}
+
+const { book } = Astro.props;
+const notes = bookNotes[book.title];
+const path = import.meta.env.BASE_URL;
+---
+
+<Base title={book.title} page="Books" description={book.summary}>
+  <section class="section">
+    <div class="container">
+      <a class="exhibit-link" href={`${path}books/`}>← Back to the bookshelf</a>
+      <div class="book-detail">
+        <div class="book-detail-cover"><BookCover book={book} /></div>
+        <div>
+          <div class="eyebrow">{book.category} · {book.year}</div>
+          <h1>{book.title}</h1>
+          <p class="book-detail-author">{book.author}</p>
+          <p class="lede">{book.summary}</p>
+        </div>
+      </div>
+      <div class="reading-notes">
+        <section aria-labelledby="main-points">
+          <div class="eyebrow">I · Reading notes</div>
+          <h2 id="main-points">Main points</h2>
+          <ul>{notes.mainPoints.map(point => <li>{point}</li>)}</ul>
+        </section>
+        <section aria-labelledby="criticisms">
+          <div class="eyebrow">II · Critical perspectives</div>
+          <h2 id="criticisms">Criticisms &amp; debates</h2>
+          <ul>{notes.criticisms.map(point => <li>{point}</li>)}</ul>
+          <p class="notes-caption">Editorial discussion points, not quotations or a substitute for reading the text.</p>
+        </section>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .book-detail { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 56px; align-items: start; margin: 48px 0 64px; }
+  h1 { font-size: clamp(2.4rem, 5vw, 4rem); line-height: 1.08; margin-bottom: 16px; }
+  .book-detail-author { font-family: var(--sans); color: var(--ink-soft); margin-bottom: 24px; }
+  .reading-notes { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; border-top: 1px solid var(--line-strong); padding-top: 36px; }
+  h2 { font-size: 2.2rem; margin-bottom: 24px; }
+  ul { padding-left: 22px; }
+  li { margin-bottom: 18px; line-height: 1.8; }
+  .notes-caption { margin-top: 24px; font-family: var(--sans); font-size: .75rem; color: var(--ink-soft); }
+  @media (max-width: 720px) { .book-detail, .reading-notes { grid-template-columns: minmax(0, 1fr); gap: 32px; } .book-detail-cover { max-width: 220px; } }
+</style>

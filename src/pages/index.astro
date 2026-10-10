@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import BookCover from '../components/BookCover.astro';
 import HistoryExhibit from '../components/HistoryExhibit.astro';
-import { books, categories } from '../data/books';
+import { books, categories, bookSlug } from '../data/books';
 import { history, eras } from '../data/history';
 
 const path = import.meta.env.BASE_URL;
@@ -36,7 +36,7 @@ const featured = books.slice(0, 8);
       <div class="book-grid">
         {
           featured.map((b) => (
-            <a class="book" href={`${path}books/`}>
+            <a class="book" href={`${path}books/${bookSlug(b)}/`}>
               <BookCover book={b} />
               <div class="book-info">
                 <div class="title">{b.title}</div>

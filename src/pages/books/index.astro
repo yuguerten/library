@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import BookCover from '../../components/BookCover.astro';
-import { books, categories } from '../../data/books';
+import { books, categories, bookSlug } from '../../data/books';
 ---
 
 <Base title="Books" page="Books" description="The full book shelf of The Left Library.">
@@ -30,7 +30,7 @@ import { books, categories } from '../../data/books';
       <div class="book-grid" id="grid">
         {
           books.map((b, i) => (
-            <article class="book" data-cat={b.category} style={`--i:${i}`}>
+            <a class="book" href={`${import.meta.env.BASE_URL}books/${bookSlug(b)}/`} data-cat={b.category} style={`--i:${i}`}>
               <BookCover book={b} />
               <div class="book-info">
                 <div class="title">{b.title}</div>
@@ -40,7 +40,7 @@ import { books, categories } from '../../data/books';
                 </div>
                 <p class="summary">{b.summary}</p>
               </div>
-            </article>
+            </a>
           ))
         }
       </div>
